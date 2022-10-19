@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FeedbackButtons, Statistics } from 'components/common';
+import { FeedbackOptions, Statistics } from 'components/common';
 
 class App extends Component {
   state = {
@@ -10,6 +10,16 @@ class App extends Component {
     'Positive feedback': '0%',
   };
 
+  countPositiveFeedbackPercentage() {
+    const newState = { ...this.state };
+    const { good, total } = newState;
+    const positiveFeedback = Math.round((good * 100) / total);
+    this.setState({
+      ...newState,
+      'Positive feedback': `${positiveFeedback}%`,
+    });
+  }
+
   countTotalFeedback() {
     const START_SLICE = 0;
     const END_SLICE = 3;
@@ -17,10 +27,13 @@ class App extends Component {
     const total = Object.values(newState)
       .slice(START_SLICE, END_SLICE)
       .reduce((acc, num) => acc + num, 0);
-    this.setState({
-      ...newState,
-      total,
-    });
+    this.setState(
+      {
+        ...newState,
+        total,
+      },
+      this.countPositiveFeedbackPercentage
+    );
   }
 
   handleIncrement(nameFeedback) {
@@ -34,14 +47,11 @@ class App extends Component {
     );
   }
 
-  static defaultProps = {};
-  static propTypes = {};
-
   render() {
     const dataFeedback = this.state;
     return (
       <div>
-        <FeedbackButtons handleClick={this.handleIncrement.bind(this)} />
+        <FeedbackOptions onLeaveFeedback={this.handleIncrement.bind(this)} />
         <Statistics dataFeedback={dataFeedback} />
       </div>
     );
