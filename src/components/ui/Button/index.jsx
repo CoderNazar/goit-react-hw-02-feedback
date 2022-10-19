@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Button extends Component {
-  static defaultProps = {};
-  static propTypes = {};
+  static defaultProps = {
+    text: '',
+    className: '',
+    handleClick: () => {},
+  };
+
+  static propTypes = {
+    text: PropTypes.string,
+    handleClick: PropTypes.func,
+    className: PropTypes.string,
+  };
 
   render() {
     const { text, handleClick, className } = this.props;
-    return(
-      <button className={className} onClick={handleClick}>{text}</button>
-    )
+    return (
+      <button className={className} onClick={handleClick}>
+        {text}
+      </button>
+    );
   }
 }
 
